@@ -285,26 +285,28 @@
     </footer>
   </div>
 
-  <!-- Logique de gestion dynamique des profils -->
+<!-- Logique de gestion dynamique des profils corrigée -->
   <script>
     window.currentProfile = 'pldmgr';
 
     function setProfile(profileName) {
       window.currentProfile = profileName;
 
-      // Update UI des boutons
+      // 1. Mise à jour visuelle des boutons de profil
       document.querySelectorAll('.btn-profile').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-profile') === profileName);
       });
 
-      // Update des attributs auto-load pour l'autoloader
-      document.querySelectorAll('.payloadTile').forEach(tile => {
-        const allowed = (tile.getAttribute('data-profiles') || '').split(' ');
-        const href = tile.getAttribute('href') || '';
+      // 2. Filtrage des tuiles de payloads selon le profil actif
+      document.querySelectorAll('#payloadMenu .payloadTile').forEach(tile => {
+        const allowedProfiles = (tile.getAttribute('data-profiles') || '').split(' ');
 
-        if (allowed.includes(profileName)) {
+        if (allowedProfiles.includes(profileName)) {
+          // Afficher la tuile
           tile.style.display = 'flex';
 
+          // Ajuster dynamiquement l'attribut data-auto si nécessaire
+          const href = tile.getAttribute('href') || '';
           if (profileName === 'pldmgr') {
             if (href.includes('payload_manager.elf')) tile.setAttribute('data-auto', 'first');
             if (href.includes('kstuff.elf')) tile.setAttribute('data-auto', 'latest');
@@ -316,6 +318,7 @@
             if (href.includes('kstuff.elf')) tile.removeAttribute('data-auto');
           }
         } else {
+          // Masquer la tuile et retirer data-auto
           tile.style.display = 'none';
           tile.removeAttribute('data-auto');
         }
