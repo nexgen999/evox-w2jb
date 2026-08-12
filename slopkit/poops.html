@@ -28,307 +28,112 @@
     });
 })();
 </script>
-<title>PS5 Webkit 9.xx - 12.xx</title>
-  <style>
-    :root {
-      --bg-color: #121214;
-      --card-bg: #202225;
-      --card-hover: #2f3136;
-      --accent-blue: #1d9bf0;
-      --text-main: #f7f9f9;
-      --text-sub: #8e9297;
-      --success-green: #2dc770;
-      --border-radius: 12px;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 24px;
-      display: flex;
-      justify-content: center;
-    }
-
-    #deck {
-      width: 100%;
-      max-width: 880px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Header */
-    .header {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-    }
-
-    .version-title {
-      grid-column: 2;
-      text-align: center;
-      font-size: 1rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-
-    .logo-container {
-      grid-column: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .logo-img {
-      height: 44px;
-      width: auto;
-    }
-
-    .badge {
-      background: rgba(45, 199, 112, 0.15);
-      color: var(--success-green);
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 700;
-    }
-
-    .profile-container {
-      grid-column: 3;
-      justify-self: end;
-    }
-
-    .profile-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid var(--accent-blue);
-      object-fit: cover;
-    }
-
-    /* Status Section */
-    .status-section {
-      text-align: center;
-      padding: 12px;
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-    }
-
-    .status-text {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    /* Sélecteur de profil */
-    .profile-selector {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .btn-profile {
-      background: var(--card-bg);
-      color: var(--text-sub);
-      border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-profile.active {
-      background: var(--accent-blue);
-      color: #fff;
-    }
-
-    /* Grille de tuiles */
-    .payload-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 12px;
-    }
-
-    .payloadTile {
-      background: var(--card-bg);
-      color: var(--text-main);
-      text-decoration: none;
-      padding: 14px 18px;
-      border-radius: var(--border-radius);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.15s;
-    }
-
-    .payloadTile:hover {
-      background: var(--card-hover);
-    }
-
-    .payloadTile .title {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .payloadTile .meta {
-      font-size: 0.75rem;
-      color: var(--text-sub);
-    }
-
-    .footer {
-      margin-top: 15px;
-      text-align: right;
-      font-size: 0.75rem;
-      color: var(--text-sub);
-    }
-
-    .hidden-elements {
-      display: none !important;
-    }
-  </style>
+<title>PS5-JB</title>
+<style>
+  html,body{margin:0;padding:0;background:#000;color:#b8c0cc;
+    font:14px/1.45 ui-monospace,Menlo,Consolas,monospace}
+  #deck{max-width:720px;margin:12px auto;padding:0 12px}
+  #stage{margin:8px 0;padding:8px 10px;border:1px solid #333;color:#e8eef6}
+  #stage.ok{border-color:#2a7;color:#7dffb2}
+  #stage.bad{border-color:#a33;color:#ff8a9a}
+  #liveStrip,#vitals,#cfg,#reboot,#verdict,#danger,#badge,#failureMessage{margin:6px 0;color:#8a93a3}
+  #failureMessage{display:none;color:#ff8a9a;font-weight:700}
+  #failureMessage.on{display:block}
+  #badge{display:none}#badge.on{display:block;color:#7dffb2}
+  #scr,#early{white-space:pre-wrap;word-break:break-word;font-size:12px;color:#7a8494;max-height:40vh;overflow:auto}
+  #payloadMenu{display:none;margin-top:12px}
+  #payloadMenu.on{display:block}
+  #payloadMenu .menuTitle{margin:0 0 8px;color:#9ab}
+  #payloadMenu .payloadTile{display:block;margin:6px 0;padding:10px;border:1px solid #333;
+    color:#dfe6f0;text-decoration:none}
+  #payloadMenu .payloadTile.busy{opacity:.4;pointer-events:none}
+  #payloadMenu .payloadTile[data-state="sending"]{border-color:#5af}
+  #payloadMenu .payloadTile[data-state="sent"]{border-color:#2a7;color:#7dffb2}
+  #payloadMenu .payloadTile[data-state="failed"]{border-color:#a33;color:#ff8a9a}
+  #payloadMenu .payloadTile img,.legacy,.stage-rail,#reactor,.field,.scan,.beam,.brand-row,#dt{display:none!important}
+  #retryInject,#forceAfterReboot{display:none;margin:10px 0;padding:10px 14px;background:#111;color:#ff8a9a;border:1px solid #a33}
+  #retryInject.on,#forceAfterReboot.on{display:inline-block}
+  .drawer-toggle{margin:8px 0;padding:6px 10px;background:#111;color:#9ab;border:1px solid #333}
+  #deepDrawer{display:none}#deepDrawer.on{display:block}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{border-bottom:1px solid #222;padding:4px 6px;text-align:left}
+  #arm{margin:12px 0;padding:10px;border:1px solid #333}
+  #nav a{display:inline-block;margin:4px 8px 4px 0;color:#7eb6ff}
+  #credits{margin:18px 0 28px;padding-top:12px;border-top:1px solid #222;
+    font-size:11px;line-height:1.55;color:#6a7380}
+  #credits a{color:#8aa4c8;text-decoration:none}
+  #credits .by{color:#9ab;margin-bottom:6px}
+</style>
 </head>
-<body>
-
-  <div id="deck">
-    <!-- Header Minimaliste -->
-    <header class="header">
-      <div class="version-title">PS5 Webkit 9.xx - 12.xx</div>
-      
-      <div class="logo-container">
-        <img src="logo.png" id="appLogo" alt="Logo" class="logo-img">
-        <div id="badge" class="badge">ONLINE · PAYLOAD MANAGER</div>
-      </div>
-
-      <div class="profile-container">
-        <img src="profile.jpg" id="profileImg" alt="Profil" class="profile-img">
-      </div>
-    </header>
-
-    <!-- Zone de statut de l'exploit -->
-    <section class="status-section">
-      <div id="stage" class="status-text">Starting exploit...</div>
-      <div id="failureMessage" class="failure-msg"></div>
-      <div id="verdict" class="verdict-msg"></div>
-    </section>
-
-    <!-- Sélecteur des 3 Profils -->
-    <section class="profile-selector">
-      <button type="button" class="btn-profile active" data-profile="pldmgr" onclick="setProfile('pldmgr')">
-        pldmgr profile
-      </button>
-      <button type="button" class="btn-profile" data-profile="evox" onclick="setProfile('evox')">
-        evox profile
-      </button>
-      <button type="button" class="btn-profile" data-profile="unified" onclick="setProfile('unified')">
-        unified profile
-      </button>
-    </section>
-
-    <!-- Grille des Payloads -->
-    <main id="payloadMenu" class="payload-grid">
-      <!-- Profile PLDMGR (Default) -->
-      <a class="payloadTile" href="payloads/payload_manager.elf" data-auto="first" data-profiles="pldmgr">
-        <span class="title">Payload Manager</span>
-        <span class="meta">auto first</span>
-      </a>
-      <a class="payloadTile" href="payloads/kstuff.elf" data-auto="latest" data-profiles="pldmgr">
-        <span class="title">Kstuff Lite</span>
-        <span class="meta">auto latest</span>
-      </a>
-
-      <!-- Profile EVOX -->
-      <a class="payloadTile" href="payloads/evox.elf" data-auto="first" data-profiles="evox">
-        <span class="title">EVOX Loader</span>
-        <span class="meta">auto first</span>
-      </a>
-
-      <!-- Profile UNIFIED -->
-      <a class="payloadTile" href="payloads/ps5-unified.elf" data-auto="first" data-profiles="unified">
-        <span class="title">PS5 Unified</span>
-        <span class="meta">auto first</span>
-      </a>
-
-      <!-- Payloads Utilitaires (Disponibles pour tous les profils) -->
-      <a class="payloadTile" href="payloads/zftp.elf" data-profiles="pldmgr evox unified">
-        <span class="title">zFTP Server</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/ftp.elf" data-profiles="pldmgr evox unified">
-        <span class="title">FTP</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/klog.elf" data-profiles="pldmgr evox unified">
-        <span class="title">Klog</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/shsrv.elf" data-profiles="pldmgr evox unified">
-        <span class="title">Shell</span>
-        <span class="meta">manual</span>
-      </a>
-    </main>
-
-    <!-- Conteneurs DOM requis par l'orchestrateur d'origine (Masqués) -->
-    <div class="hidden-elements">
-      <button id="drawerToggle">Logs</button>
-      <button id="retryInject">Retry</button>
-      <button id="forceAfterReboot">Force</button>
-      <pre id="early"></pre>
-      <pre id="scr"></pre>
-    </div>
-
-    <!-- Footer Crédits -->
-    <footer class="footer">
-      Exploit Chain & Slopkit: <strong>jordyidk</strong> | Autoloader: <strong>Nexgen999</strong> | Original Poops UI: <strong>jordyidk</strong> | Redesign: <strong>Nexgen999</strong>
-    </footer>
+<body class="quiet">
+<div id="deck">
+  <div id="failureMessage">UNLUCKY — REBOOT REQUIRED</div>
+  <h1 class="legacy">poops</h1>
+  <div id="reactor" class="reactor" hidden aria-hidden="true"></div>
+  <div id="reboot"></div>
+  <div id="verdict"></div>
+  <div id="danger"></div>
+  <div id="stage">starting…</div>
+  <div id="liveStrip" aria-live="polite"></div>
+  <div class="stage-rail" id="stageRail" hidden>
+    <span class="stage-chip" data-chip="webkit">WebKit</span>
+    <span class="stage-chip" data-chip="rop">ROP</span>
+    <span class="stage-chip" data-chip="kernel">Kernel</span>
+    <span class="stage-chip" data-chip="elfldr">elfldr</span>
+    <span class="stage-chip" data-chip="kstuff">kstuff</span>
+    <span class="stage-chip" data-chip="pldmgr">pldmgr</span>
   </div>
-
-<!-- Logique de gestion dynamique des profils corrigée -->
-  <script>
-    window.currentProfile = 'pldmgr';
-
-    function setProfile(profileName) {
-      window.currentProfile = profileName;
-
-      // 1. Mise à jour visuelle des boutons de profil
-      document.querySelectorAll('.btn-profile').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-profile') === profileName);
-      });
-
-      // 2. Filtrage des tuiles de payloads selon le profil actif
-      document.querySelectorAll('#payloadMenu .payloadTile').forEach(tile => {
-        const allowedProfiles = (tile.getAttribute('data-profiles') || '').split(' ');
-
-        if (allowedProfiles.includes(profileName)) {
-          // Afficher la tuile
-          tile.style.display = 'flex';
-
-          // Ajuster dynamiquement l'attribut data-auto si nécessaire
-          const href = tile.getAttribute('href') || '';
-          if (profileName === 'pldmgr') {
-            if (href.includes('payload_manager.elf')) tile.setAttribute('data-auto', 'first');
-            if (href.includes('kstuff.elf')) tile.setAttribute('data-auto', 'latest');
-          } else if (profileName === 'evox') {
-            if (href.includes('evox.elf')) tile.setAttribute('data-auto', 'first');
-            if (href.includes('kstuff.elf')) tile.removeAttribute('data-auto');
-          } else if (profileName === 'unified') {
-            if (href.includes('ps5-unified.elf')) tile.setAttribute('data-auto', 'first');
-            if (href.includes('kstuff.elf')) tile.removeAttribute('data-auto');
-          }
-        } else {
-          // Masquer la tuile et retirer data-auto
-          tile.style.display = 'none';
-          tile.removeAttribute('data-auto');
-        }
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setProfile('pldmgr');
-    });
-  </script>
+  <div id="badge">ONLINE · PAYLOAD MANAGER</div>
+  <div id="vitals"></div>
+  <div id="cfg"></div>
+  <pre id="early"></pre>
+  <pre id="scr"></pre>
+  <button type="button" class="drawer-toggle" id="drawerToggle">LOG</button>
+  <div id="deepDrawer">
+    <div id="wrap">
+      <table>
+        <thead><tr><th>#</th><th>test</th><th>st</th><th>result</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="tally"></div>
+    <div id="summary"></div>
+  </div>
+  <div id="payloadMenu">
+    <div class="menuTitle">PAYLOADS</div>
+    <a class="payloadTile" href="#" data-name="kstuff-lite.elf" data-key="kstuff"
+       data-remote="https://github.com/EchoStretch/kstuff-lite/releases/latest/download/kstuff.elf"
+       data-state="default"><span>Kstuff Lite</span><span class="meta">auto first</span></a>
+    <a class="payloadTile primary" href="#" data-name="pldmgr.elf" data-key="pldmgr"
+       data-release-api="https://api.github.com/repos/itsPLK/ps5-payload-manager/releases/latest"
+       data-asset-re="^pldmgr.*\\.elf$"
+       data-state="default"><span>Payload Manager</span><span class="meta">auto latest</span></a>
+    <a class="payloadTile" href="#" data-name="ftpsrv-ps5.elf" data-key="ftp"
+       data-state="default"><span>FTP</span><span class="meta">aux</span></a>
+    <a class="payloadTile" href="#" data-name="gdbsrv-ps5.elf" data-key="gdb"
+       data-state="default"><span>GDB</span><span class="meta">aux</span></a>
+    <a class="payloadTile" href="#" data-name="klogsrv-ps5.elf" data-key="klog"
+       data-state="default"><span>Klog</span><span class="meta">aux</span></a>
+    <a class="payloadTile" href="#" data-name="shsrv-ps5.elf" data-key="shell"
+       data-state="default"><span>Shell</span><span class="meta">aux</span></a>
+    <a class="payloadTile" href="#" data-name="websrv-ps5.elf" data-key="web"
+       data-state="default"><span>Web</span><span class="meta">aux</span></a>
+  </div>
+  <button type="button" id="retryInject">RETRY AUTO INJECT</button>
+  <button type="button" id="forceAfterReboot">I REBOOTED — START JAILBREAK</button>
+  <div id="nav"></div>
+  <div id="arm" hidden>Not armed. Redirecting…</div>
+  <footer id="credits">
+    <div class="by">Developed by <strong>Ramesh</strong> · EzioRamesha</div>
+    Credits: <a href="https://github.com/jordyidk/slopkit" target="_blank" rel="noopener">jordyidk/slopkit</a>
+    · original research: jordy,Egy, Sonic, Yenyen, Zeco, Gezine, EchoStretch, Ufm42, TheFloW, John Tornblom, Flatz, PS5 R&amp;D Discord
+    · lite host &amp; tooling: <strong>Ramesh</strong>
+    · <a href="https://github.com/EchoStretch/kstuff-lite" target="_blank" rel="noopener">EchoStretch/kstuff-lite</a>
+    · <a href="https://github.com/itsPLK/ps5-payload-manager" target="_blank" rel="noopener">itsPLK/ps5-payload-manager</a>
+    · <a href="https://github.com/sleirsgoevy" target="_blank" rel="noopener">sleirsgoevy</a>
+  </footer>
+</div>
+<div id="console" hidden></div>
 
 <script src="rop.js"></script>
 <script src="main.js?v=18"></script>
