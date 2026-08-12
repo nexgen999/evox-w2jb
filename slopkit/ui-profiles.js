@@ -1,20 +1,20 @@
 window.currentProfile = 'pldmgr';
 
-function setProfile(profileName) {
+function setProfile(profileName, autoRun = true) {
   window.currentProfile = profileName;
 
-  // 1. Boutons UI
+  // 1. Mise à jour de l'état des boutons de profil
   document.querySelectorAll('.btn-profile').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-profile') === profileName);
   });
 
-  // 2. Gestion des tuiles et des attributs d'auto-load pour Slopkit
+  // 2. Filtrage des tuiles et configuration des règles d'auto-injection
   document.querySelectorAll('.payloadTile').forEach(tile => {
     const allowed = (tile.getAttribute('data-profiles') || '').split(' ');
     const href = tile.getAttribute('href') || '';
 
     if (allowed.includes(profileName)) {
-      tile.style.display = 'flex';
+      tile.style.display = '';
 
       if (profileName === 'pldmgr') {
         if (href.includes('payload_manager.elf')) tile.setAttribute('data-auto', 'first');
@@ -31,8 +31,21 @@ function setProfile(profileName) {
       tile.removeAttribute('data-auto');
     }
   });
+
+  // 3. Exécution de la chaîne d'injection si demandé
+  if (autoRun) {
+    runCurrentProfile();
+  }
 }
 
+// Fonction déclenchée au clic sur l'image de profil ou lors du changement de profil
+function runCurrentProfile() {
+  if (typeof payloadSendBusy !== 'undefined' && payloadSendBusy) return;
+  if (typeof autoInjectStarted !== 'undefined') autoInjectStarted = false;
+  if (typeof autoInjectPayloads === 'function') autoInjectPayloads();
+}
+
+// Initialisation au chargement
 document.addEventListener('DOMContentLoaded', () => {
-  setProfile('pldmgr');
+  setProfile('pldmgr', false);
 });
