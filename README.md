@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">PS5 webkit exploit W2JB</h1>
 
-<p align="center">PS5 webkit exploit W2JB expérimental with unified loader, autoload /data/ps5_autoloader folder .</p>
+<p align="center">PS5 webkit exploit W2JB expérimental.</p>
 
 edit your ps5 dns :
 
@@ -11,7 +11,13 @@ edit your ps5 dns :
 or
 - 45.56.67.85
 
-go to : https://nexgen999.github.io/w2jb from user guide
+go to : https://nexgen999.github.io/evox-w2jb from user guide
+
+multiple profile loader
+
+- pldmgr
+- evox
+- ps-unified to load /data/ps5_autoloader
 
 project fork from :
 
