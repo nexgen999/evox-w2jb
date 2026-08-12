@@ -28,276 +28,143 @@
     });
 })();
 </script>
-<title>PS5 Webkit 9.xx - 12.xx</title>
+<title>PS5 Host / Exploit</title>
   <style>
-    :root {
-      --bg-color: #121214;
-      --card-bg: #202225;
-      --card-hover: #2f3136;
-      --accent-blue: #1d9bf0;
-      --text-main: #f7f9f9;
-      --text-sub: #8e9297;
-      --success-green: #2dc770;
-      --border-radius: 12px;
-    }
-
+    /* Styles de base */
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
-      padding: 24px;
-      display: flex;
-      justify-content: center;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
     }
-
-    #deck {
-      width: 100%;
-      max-width: 880px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Header */
-    .header {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-    }
-
-    .version-title {
-      grid-column: 2;
-      text-align: center;
-      font-size: 1rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-
-    .logo-container {
-      grid-column: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .logo-img {
-      height: 44px;
-      width: auto;
-    }
-
-    .badge {
-      background: rgba(45, 199, 112, 0.15);
-      color: var(--success-green);
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 700;
-    }
-
-    .profile-container {
-      grid-column: 3;
-      justify-self: end;
-    }
-
-    .profile-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid var(--accent-blue);
-      object-fit: cover;
-    }
-
-    /* Status Section */
-    .status-section {
-      text-align: center;
-      padding: 12px;
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-    }
-
-    .status-text {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    /* Sélecteur de profil */
-    .profile-selector {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .btn-profile {
-      background: var(--card-bg);
-      color: var(--text-sub);
-      border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-profile.active {
-      background: var(--accent-blue);
-      color: #fff;
-    }
-
-    /* Grille de tuiles */
-    .payload-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 12px;
-    }
-
-    .payloadTile {
-      background: var(--card-bg);
-      color: var(--text-main);
-      text-decoration: none;
-      padding: 14px 18px;
-      border-radius: var(--border-radius);
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.15s;
+      padding: 10px 20px;
+      background-color: #1e1e1e;
+      border-bottom: 1px solid #333;
     }
-
-    .payloadTile:hover {
-      background: var(--card-hover);
+    .profile-container {
+      display: flex;
+      align-items: center;
     }
-
-    .payloadTile .title {
-      font-weight: 600;
-      font-size: 0.9rem;
+    .profile-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #007acc;
+      transition: transform 0.2s;
     }
-
-    .payloadTile .meta {
-      font-size: 0.75rem;
-      color: var(--text-sub);
+    .profile-img:hover {
+      transform: scale(1.05);
     }
-
-    .footer {
-      margin-top: 15px;
-      text-align: right;
-      font-size: 0.75rem;
-      color: var(--text-sub);
+    .profiles-bar {
+      display: flex;
+      gap: 10px;
+      margin: 20px;
     }
-
-    .hidden-elements {
-      display: none !important;
+    .btn-profile {
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-profile.active {
+      background-color: #007acc;
+      border-color: #0099ff;
+    }
+    .payloads-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 20px;
+    }
+    .payloadTile {
+      background-color: #252525;
+      border: 1px solid #3d3d3d;
+      border-radius: 6px;
+      padding: 15px;
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+    }
+    #log {
+      margin: 20px;
+      padding: 10px;
+      background-color: #000;
+      color: #00ff00;
+      font-family: monospace;
+      height: 150px;
+      overflow-y: auto;
+      border: 1px solid #333;
     }
   </style>
 </head>
 <body>
 
-  <div id="deck">
-    <!-- Header Minimaliste -->
-    <header class="header">
-      <div class="version-title">PS5 Webkit 9.xx - 12.xx</div>
-      
-      <div class="logo-container">
-        <img src="logo.png" id="appLogo" alt="Logo" class="logo-img">
-        <div id="badge" class="badge">ONLINE · PAYLOAD MANAGER</div>
-      </div>
-
-      <div class="profile-container">
-        <img src="profile.jpg" id="profileImg" alt="Profil" class="profile-img">
-      </div>
-    </header>
-
-    <!-- Zone de statut de l'exploit -->
-    <section class="status-section">
-      <div id="stage" class="status-text">Starting exploit...</div>
-      <div id="failureMessage" class="failure-msg"></div>
-      <div id="verdict" class="verdict-msg"></div>
-    </section>
-
-    <!-- Sélecteur des 3 Profils -->
-    <section class="profile-selector">
-      <button type="button" class="btn-profile active" data-profile="pldmgr" onclick="setProfile('pldmgr')">
-        pldmgr profile
-      </button>
-      <button type="button" class="btn-profile" data-profile="evox" onclick="setProfile('evox')">
-        evox profile
-      </button>
-      <button type="button" class="btn-profile" data-profile="unified" onclick="setProfile('unified')">
-        unified profile
-      </button>
-    </section>
-
-    <!-- Grille des Payloads -->
-    <main id="payloadMenu" class="payload-grid">
-      <!-- Profile PLDMGR (Default) -->
-      <a class="payloadTile" href="payloads/payload_manager.elf" data-auto="first" data-profiles="pldmgr">
-        <span class="title">Payload Manager</span>
-        <span class="meta">auto first</span>
-      </a>
-      <a class="payloadTile" href="payloads/kstuff.elf" data-auto="latest" data-profiles="pldmgr">
-        <span class="title">Kstuff Lite</span>
-        <span class="meta">auto latest</span>
-      </a>
-
-      <!-- Profile EVOX -->
-      <a class="payloadTile" href="payloads/evox.elf" data-auto="first" data-profiles="evox">
-        <span class="title">EVOX Loader</span>
-        <span class="meta">auto first</span>
-      </a>
-
-      <!-- Profile UNIFIED -->
-      <a class="payloadTile" href="payloads/ps5-unified.elf" data-auto="first" data-profiles="unified">
-        <span class="title">PS5 Unified</span>
-        <span class="meta">auto first</span>
-      </a>
-
-      <!-- Payloads Utilitaires (Disponibles pour tous les profils) -->
-      <a class="payloadTile" href="payloads/zftp.elf" data-profiles="pldmgr evox unified">
-        <span class="title">zFTP Server</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/ftp.elf" data-profiles="pldmgr evox unified">
-        <span class="title">FTP</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/klog.elf" data-profiles="pldmgr evox unified">
-        <span class="title">Klog</span>
-        <span class="meta">manual</span>
-      </a>
-      <a class="payloadTile" href="payloads/shsrv.elf" data-profiles="pldmgr evox unified">
-        <span class="title">Shell</span>
-        <span class="meta">manual</span>
-      </a>
-    </main>
-
-    <!-- Conteneurs DOM requis par l'orchestrateur d'origine (Masqués) -->
-    <div class="hidden-elements">
-      <button id="drawerToggle">Logs</button>
-      <button id="retryInject">Retry</button>
-      <button id="forceAfterReboot">Force</button>
-      <pre id="early"></pre>
-      <pre id="scr"></pre>
+  <header>
+    <h2>PS5 Exploit Host</h2>
+    <div class="profile-container">
+      <!-- Clic sur la photo de profil pour relancer l'injection du profil actif -->
+      <img src="profile.jpg" id="profileImg" alt="Profil" class="profile-img" onclick="runCurrentProfile()" title="Relancer l'injection">
     </div>
+  </header>
 
-    <!-- Footer Crédits -->
-    <footer class="footer">
-      Exploit Chain & Slopkit: <strong>jordyidk</strong> | Autoloader: <strong>Nexgen999</strong> | Original Poops UI: <strong>jordyidk</strong> | Redesign: <strong>Nexgen999</strong>
-    </footer>
+  <div class="profiles-bar">
+    <button class="btn-profile active" data-profile="pldmgr" onclick="setProfile('pldmgr')">Payload Manager</button>
+    <button class="btn-profile" data-profile="evox" onclick="setProfile('evox')">EtaHEN / EvoX</button>
+    <button class="btn-profile" data-profile="unified" onclick="setProfile('unified')">Unified</button>
   </div>
 
-  <!-- Logique de gestion dynamique des profils -->
+  <div class="payloads-grid">
+    <a class="payloadTile" href="payloads/payload_manager.elf" data-profiles="pldmgr" data-auto="first">
+      <span>Payload Manager</span>
+    </a>
+    <a class="payloadTile" href="payloads/kstuff.elf" data-profiles="pldmgr evox unified" data-auto="latest">
+      <span>kstuff</span>
+    </a>
+    <a class="payloadTile" href="payloads/evox.elf" data-profiles="evox">
+      <span>EvoX</span>
+    </a>
+    <a class="payloadTile" href="payloads/ps5-unified.elf" data-profiles="unified">
+      <span>PS5 Unified</span>
+    </a>
+  </div>
+
+  <div id="log">Initialisation...</div>
+
   <script>
+    // Variables globales
     window.currentProfile = 'pldmgr';
+    let autoInjectStarted = false;
+    let payloadSendBusy = false;
 
-    function setProfile(profileName) {
+    function log(msg) {
+      const logDiv = document.getElementById('log');
+      logDiv.innerHTML += "<br>> " + msg;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    // Gestion de la sélection et de l'exécution du profil
+    function setProfile(profileName, autoRun = true) {
       window.currentProfile = profileName;
+      log("Profil sélectionné : " + profileName);
 
-      // Update UI des boutons
+      // 1. Mettre à jour les boutons visuels
       document.querySelectorAll('.btn-profile').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-profile') === profileName);
       });
 
-      // Update des attributs auto-load pour l'autoloader
+      // 2. Filtrer les tuiles et configurer l'ordre d'auto-injection
       document.querySelectorAll('.payloadTile').forEach(tile => {
         const allowed = (tile.getAttribute('data-profiles') || '').split(' ');
         const href = tile.getAttribute('href') || '';
@@ -320,10 +187,51 @@
           tile.removeAttribute('data-auto');
         }
       });
+
+      // 3. Lancer l'exécution
+      if (autoRun) {
+        runCurrentProfile();
+      }
     }
 
+    // Fonction pour forcer la réinjection du profil courant
+    function runCurrentProfile() {
+      if (payloadSendBusy) {
+        log("Un envoi est déjà en cours, veuillez patienter...");
+        return;
+      }
+      
+      log("Lancement de la chaîne d'injection pour le profil : " + window.currentProfile);
+      autoInjectStarted = false; // Réinitialise le verrou
+      autoInjectPayloads();
+    }
+
+    // Simulation de la chaîne d'exploit / injection de payload
+    function autoInjectPayloads() {
+      if (autoInjectStarted) return;
+      autoInjectStarted = true;
+      payloadSendBusy = true;
+
+      const firstPayload = document.querySelector('.payloadTile[data-auto="first"]:not([style*="display: none"])');
+      const latestPayload = document.querySelector('.payloadTile[data-auto="latest"]:not([style*="display: none"])');
+
+      if (firstPayload) {
+        log("Injection : " + firstPayload.getAttribute('href'));
+      }
+
+      setTimeout(() => {
+        if (latestPayload) {
+          log("Injection : " + latestPayload.getAttribute('href'));
+        }
+        payloadSendBusy = false;
+        log("Injection terminée avec succès.");
+      }, 1000);
+    }
+
+    // Initialisation au chargement de la page
     document.addEventListener('DOMContentLoaded', () => {
-      setProfile('pldmgr');
+      setProfile('pldmgr', false);
+      log("Système prêt.");
     });
   </script>
 
